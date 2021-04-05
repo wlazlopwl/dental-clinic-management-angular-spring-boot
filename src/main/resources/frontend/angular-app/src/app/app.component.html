@@ -1,0 +1,54 @@
+<nav class="navbar navbar-expand-sm bg-light">
+
+  <!-- Links -->
+  <ul class="navbar-nav">
+
+<!--    PATIENT NAV-->
+
+    <li class="nav-item dropdown">
+      <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        Patient
+      </a>
+      <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+        <a class="dropdown-item" routerLink="/patient" >Patients</a>
+        <a class="dropdown-item" href="#">Financial</a>
+        <div class="dropdown-divider"></div>
+        <a class="dropdown-item" href="#">Something else here</a>
+      </div>
+    </li>
+
+<!--    DOCTOR NAV-->
+
+    <li class="nav-item dropdown">
+      <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownDoctor" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        Doctor
+      </a>
+      <div class="dropdown-menu" aria-labelledby="navbarDropdownDoctor">
+        <a class="dropdown-item" routerLink="/doctors" >Doctors</a>
+        <a class="dropdown-item" href="#">Financial</a>
+        <div class="dropdown-divider"></div>
+        <a class="dropdown-item" href="#">Something else here</a>
+      </div>
+    </li>
+
+<!--    //VISIT NAV-->
+
+    <li class="nav-item dropdown">
+      <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownVisit" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        Visit
+      </a>
+      <div class="dropdown-menu" aria-labelledby="navbarDropdownVisit">
+        <a class="dropdown-item" routerLink="/visits" >Visits</a>
+        <a class="dropdown-item" href="#">Add new visit</a>
+        <div class="dropdown-divider"></div>
+        <a class="dropdown-item" href="#">Something else here</a>
+      </div>
+    </li>
+  </ul>
+
+</nav>
+
+<div class="outer-outlet">
+  <router-outlet></router-outlet>
+</div>
+

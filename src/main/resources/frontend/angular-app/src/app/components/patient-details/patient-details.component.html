@@ -1,0 +1,47 @@
+<div>
+  <div class="main-patient-info">
+    <br><br>
+    <div class="col-md-6">
+      <div class="profile-head">
+        <h5>
+         {{patient.firstName +' '+patient.lastName}}
+        </h5>
+        <h6>
+          {{patient.phone}}
+        </h6>
+
+
+
+
+
+
+
+<br><br>
+
+      </div>
+    </div>
+  </div>
+  <div>
+    <!-- Nav tabs -->
+    <ul class="nav nav-tabs">
+      <li class="nav-item">
+        <a class="nav-link active" data-toggle="tab" href="#home">General</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" data-toggle="tab" href="#menu1">Additional</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" data-toggle="tab" href="#menu2">History</a>
+      </li>
+    </ul>
+
+    <!-- Tab panes -->
+    <div class="tab-content">
+      <div class="tab-pane container active" id="home"><app-patient-details-general  [patient]="patient"></app-patient-details-general></div>
+      <div class="tab-pane container fade" id="menu1"><app-patient-details-additional [patient]="patient"></app-patient-details-additional></div>
+      <div class="tab-pane container fade" id="menu2"><app-patient-details-history [visits]="patient.visits"></app-patient-details-history></div>
+    </div>
+  </div>
+
+
+</div>

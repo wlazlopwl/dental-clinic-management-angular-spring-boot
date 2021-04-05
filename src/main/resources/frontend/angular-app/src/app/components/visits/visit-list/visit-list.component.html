@@ -1,0 +1,27 @@
+<table class=" table table-condensed">
+  <thead>
+  <tr>
+    <th>Patient</th>
+    <th>Visit date</th>
+    <th>PESEL</th>
+    <th>Doctor</th>
+    <th>Room</th>
+    <th>Status</th>
+    <th>Actions</th>
+  </tr>
+  </thead>
+  <tr *ngFor="let visit of visits">
+    <td>{{ visit.id }}</td>
+    <td>{{ visit.visitDate }}</td>
+    <td>{{visit.id}}</td>
+    <td>{{visit.doctor.firstName + ' ' + visit.doctor.lastName}}</td>
+    <td>{{visit.room.name}}</td>
+    <td>{{ visit.visitStatusType }}</td>
+
+    <td>
+      <button class="btn btn-secondary">Edit</button>
+      <button class="btn btn-secondary">Delete</button>
+    </td>
+  </tr>
+</table>
+
