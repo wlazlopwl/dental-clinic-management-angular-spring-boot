@@ -1,62 +1,84 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {PatientService} from "../patient.service";
 import {Patient} from "../patient";
 import {HttpErrorResponse} from "@angular/common/http";
 
 @Component({
-  selector: 'app-patient-list',
-  templateUrl: './patient-list.component.html',
-  styleUrls: ['./patient-list.component.css']
+    selector: 'app-patient-list',
+    templateUrl: './patient-list.component.html',
+    styleUrls: ['./patient-list.component.css']
 })
 export class PatientListComponent implements OnInit {
 
-  patients: Patient[]
-  public deletePatient: Patient;
+    patients: Patient[]
+    public deletePatient: Patient;
 
-  page =1;
-  count=10;
-  pageSize=3;
-  pageSizes=[5,10,15,20];
-  constructor( private patientService: PatientService ) { }
+    page = 1;
+    count = -1;
+    pageSize = 5;
+    pageSizes = [5, 10, 15, 20,25,30];
 
-  ngOnInit(): void {
-  this.getPatients();
-
-}
-
-  public getPatients(){
-
-    this.patientService.getPatients().subscribe(
-      (data) => {
-        this.patients=data;
-        console.log(this.patients)
-      },
-      (error :HttpErrorResponse) =>{
-        alert(error.message);
-      }
-    );
-  }
-
-  public openModal(patient: Patient, mode: string) :void {
-    if (mode === "delete")
-      this.deletePatient = patient
-
-      }
-  public onDeletePatient(patientId: number):void{
-    this.patientService.deletePatient(patientId).subscribe(
-      (response)=>{
-      this.getPatients();
-      },
-      (error: HttpErrorResponse)=>{
-        alert(error.message);
+    constructor(private patientService: PatientService) {
     }
-    )
-  }
+
+    ngOnInit(): void {
+        this.getPatients();
+
+    }
+
+    public getPatients() {
+        const params = this.setParams(this.page, this.pageSize);
+        this.patientService.getPatients(params).subscribe(
+            response => {
+                const {patients, totalItems} = response;
+                this.patients = patients;
+                this.count = totalItems;
+
+            }
+        )
 
 
+    }
+
+    setParams(page: number, pageSize: number): any {
+        let params: any = {};
+        if (page) {
+            params[`page`] = page - 1;
+        }
+        if (pageSize) {
+            params[`size`] = pageSize;
+        }
+
+        return params;
+    }
+
+    public openModal(patient: Patient, mode: string): void {
+        if (mode === "delete")
+            this.deletePatient = patient
+
+    }
+
+    public onDeletePatient(patientId: number): void {
+        this.patientService.deletePatient(patientId).subscribe(
+            (response) => {
+                this.getPatients();
+            },
+            (error: HttpErrorResponse) => {
+                alert(error.message);
+            }
+        )
+    }
 
 
+    pageSizeChange(event: any): void {
+        this.pageSize = event.target.value;
+        this.page = 1;
+        this.getPatients();
+    }
 
+    changePage(event: number) {
+        this.page = event;
+        this.getPatients();
 
-
+    }
 }

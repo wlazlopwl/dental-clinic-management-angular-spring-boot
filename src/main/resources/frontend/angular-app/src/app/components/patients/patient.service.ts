@@ -13,8 +13,8 @@ export class PatientService {
   constructor(private http: HttpClient) {
   }
 
-  public getPatients(): Observable<Patient[]> {
-    return this.http.get<Patient[]>(`${this.apiServerUrl}/patient/all`);
+  public getPatients(params:any): Observable<any> {
+    return this.http.get<any>(`${this.apiServerUrl}/patient/all`,{params});
   }
 
   public addPatient(patient : Patient): Observable<Patient> {

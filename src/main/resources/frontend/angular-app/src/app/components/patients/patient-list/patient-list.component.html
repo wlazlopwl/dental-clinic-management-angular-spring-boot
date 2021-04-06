@@ -1,90 +1,112 @@
 <div>
-  <br>
-  <a routerLink="/patient/add" class="btn btn-outline-primary">Add patient</a>
-  <br>
+    <br>
+    <a routerLink="/patient/add" class="btn btn-outline-primary">Add patient</a>
+    <br>
 
-  <br>
+    <br>
+    <div class="mt-3">
+        Show <select (change)="pageSizeChange($event)">
+        <option *ngFor="let size of pageSizes" [ngValue]="size">
+            {{ size }}
+        </option>
+    </select> patients per page.
 
-
-
-  <br>
-  <table class="table table-sm">
-    <thead>
-    <tr>
-      <th scope="col">Patient name</th>
-      <th scope="col">Gender</th>
-      <th scope="col">Date of birth</th>
-      <th scope="col">Options</th>
-    </tr>
-    </thead>
-    <tbody>
-
-    <tr *ngFor="let patient of patients ">
-      <td [routerLink]="['/patient',patient.id]">{{patient.firstName + " " + patient.lastName}}</td>
-      <td>{{patient.gender}}</td>
-      <td>{{patient.age}}</td>
-      <td>
-        <div class="row">
-          <button (click)="openModal(patient, 'edit')" type="button" class="btn btn-outline-primary" data-toggle="modal"
-                  data-target="#editPatientModal"><i
-            class="bi bi-pencil-square"></i></button>
-          <button (click)="openModal(patient, 'delete')" type="button" class="btn btn-outline-danger"
-                  data-toggle="modal" data-target="#deletePatientModal"><i
-            class="bi bi-x-square-fill"></i>
-          </button>
-        </div>
-      </td>
-    </tr>
-    </tbody>
-  </table>
-
-
-  <!-- Modal edit patient -->
-  <div class="modal fade" id="editPatientModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel1"
-       aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel1">Confirm action</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          Are you sure you want to edit the patient?
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
-          <button type="button" class="btn btn-primary">Yes</button>
-        </div>
-      </div>
     </div>
-  </div>
 
-  <!-- Modal delete patient-->
-  <div class="modal fade" id="deletePatientModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-       aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Confirm action</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
+
+    <br>
+    <table class="table table-sm table-bordered table-hover">
+        <thead>
+        <tr>
+            <th scope="col">Patient name</th>
+            <th scope="col">Gender</th>
+            <th scope="col">PESEL</th>
+            <th scope="col">Options</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        <tr *ngFor="let patient of patients | paginate:{
+    currentPage: page,
+    totalItems: count,
+    itemsPerPage: pageSize
+    } ">
+            <td [routerLink]="['/patient',patient.id]">{{patient.firstName + " " + patient.lastName}}</td>
+            <td>{{patient.gender}}</td>
+            <td>{{patient.pesel}}</td>
+            <td>
+                <div class="row">
+                    <button (click)="openModal(patient, 'edit')" type="button"  class="btn btn-outline-primary ml-4"
+                            data-toggle="modal"
+                            data-target="#editPatientModal"><i
+                            class="bi bi-pencil-square"></i></button>
+                    <button (click)="openModal(patient, 'delete')" type="button" class="btn btn-outline-danger"
+                            data-toggle="modal" data-target="#deletePatientModal"><i
+                            class="bi bi-x-square-fill"></i>
+                    </button>
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+
+    <!-- Modal edit patient -->
+    <div class="modal fade" id="editPatientModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel1"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel1">Confirm action</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to edit the patient?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                    <button type="button" class="btn btn-primary">Yes</button>
+                </div>
+            </div>
         </div>
-        <div class="modal-body">
-          Are you sure you want to delete patient {{deletePatient?.firstName + ' ' + deletePatient?.lastName}}?
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
-          <button (click)="onDeletePatient(deletePatient?.id)" data-dismiss="modal" type="button"
-                  class="btn btn-primary">Yes
-          </button>
-        </div>
-      </div>
     </div>
-  </div>
 
+    <!-- Modal delete patient-->
+    <div class="modal fade" id="deletePatientModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Confirm action</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to delete patient {{deletePatient?.firstName + ' ' + deletePatient?.lastName}}
+                    ?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                    <button (click)="onDeletePatient(deletePatient?.id)" data-dismiss="modal" type="button"
+                            class="btn btn-primary">Yes
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12">
+        <pagination-controls
+                previousLabel="Prev"
+                nextLabel="Next"
+                [responsive]="true"
+                maxSize="9"
+                (pageChange)="changePage($event)"
 
+        ></pagination-controls>
+    </div>
 </div>
+
 

@@ -70,10 +70,11 @@ public class PatientService {
                 .orElseThrow(() -> new PatientNotFoundException("Pesel " + pesel + " was not found"));
     }
 
-    public Page<Patient> getPaginatedPatient(int pageNo, int pageSize){
-        Pageable pageable= PageRequest.of(pageNo, pageSize);
+    public Page<Patient> getPaginatedPatient(int pageNo, int pageSize) {
+        Pageable pageable = PageRequest.of(pageNo, pageSize);
         return patientRepository.findAll(pageable);
     }
+
     private void patientEmailOrPeselExist(Patient patient) {
         if (patientRepository.existsPatientByEmail(patient.getEmail())) {
             throw new PatientEmailExistException("Email " + patient.getEmail() + " already exist");

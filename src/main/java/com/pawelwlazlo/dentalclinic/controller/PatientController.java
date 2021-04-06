@@ -3,11 +3,14 @@ package com.pawelwlazlo.dentalclinic.controller;
 import com.pawelwlazlo.dentalclinic.model.Patient;
 import com.pawelwlazlo.dentalclinic.service.patient.PatientService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/patient")
@@ -22,17 +25,20 @@ public class PatientController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<Patient>> getAllPatients(
-//            @RequestParam(defaultValue = "0") int page,
-//            @RequestParam(defaultValue = "3") int size
-            )
-    {
+    public ResponseEntity<Map<String, Object>> getAllPatients(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size
+    ) {
 
-//        Page<Patient> patientPage = patientService.getPaginatedPatient(page, size);
-        List<Patient> patients = patientService.findAllPatients();
+        Page<Patient> patientPage = patientService.getPaginatedPatient(page, size);
+        List<Patient> patients = patientPage.getContent();
+        Map<String, Object> response = new HashMap<>();
+        response.put("patients", patients);
+        response.put("currentPage", patientPage.getNumber());
+        response.put("totalItems", patientPage.getTotalElements());
+        response.put("totalPages", patientPage.getTotalPages());
 
-
-        return new ResponseEntity<>(patients, HttpStatus.OK);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping("/find/{id}")
