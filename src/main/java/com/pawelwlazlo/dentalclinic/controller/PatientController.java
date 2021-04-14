@@ -27,10 +27,19 @@ public class PatientController {
     @GetMapping("/all")
     public ResponseEntity<Map<String, Object>> getAllPatients(
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "5") int size
+            @RequestParam(defaultValue = "5") int size,
+            @RequestParam(defaultValue = "") String column,
+            @RequestParam(defaultValue = "false") boolean descending
     ) {
+        Page<Patient> patientPage;
 
-        Page<Patient> patientPage = patientService.getPaginatedPatient(page, size);
+        if (column.isEmpty()) {
+            patientPage = patientService.getPaginatedPatient(page, size);
+        } else {
+            patientPage = patientService.getPaginatedAndSortingPatient(page, size, column, descending);
+        }
+
+
         List<Patient> patients = patientPage.getContent();
         Map<String, Object> response = new HashMap<>();
         response.put("patients", patients);

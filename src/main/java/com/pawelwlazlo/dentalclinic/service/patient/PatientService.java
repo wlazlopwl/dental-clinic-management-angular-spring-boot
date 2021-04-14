@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -72,6 +73,20 @@ public class PatientService {
 
     public Page<Patient> getPaginatedPatient(int pageNo, int pageSize) {
         Pageable pageable = PageRequest.of(pageNo, pageSize);
+        return patientRepository.findAll(pageable);
+    }
+
+    public Page<Patient> getPaginatedAndSortingPatient(int pageNo, int pageSize, String column, boolean descending) {
+        Pageable pageable;
+        if (descending) {
+             pageable = PageRequest.of(pageNo, pageSize, Sort.by(column).descending());
+        }
+        else {
+             pageable = PageRequest.of(pageNo, pageSize, Sort.by(column));
+
+        }
+
+
         return patientRepository.findAll(pageable);
     }
 

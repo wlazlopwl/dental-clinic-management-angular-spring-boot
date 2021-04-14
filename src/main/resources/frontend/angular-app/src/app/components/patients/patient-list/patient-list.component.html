@@ -15,12 +15,25 @@
 
 
     <br>
-    <table class="table table-sm table-bordered table-hover">
+    <table class="table table-sm table-bordered table-hover table-striped">
         <thead>
         <tr>
-            <th scope="col">Patient name</th>
-            <th scope="col">Gender</th>
-            <th scope="col">PESEL</th>
+            <th (click)="sortByLastName()" scope="col">Name
+                <i *ngIf="columnToSort == 'lastName'"
+                   [ngClass]="sortDescending?'bi bi-sort-alpha-down-alt' : 'bi bi-sort-alpha-down'"
+                ></i>
+
+            </th>
+            <th (click)="changeGenderSort()" scope="col">Gender
+                <i *ngIf="columnToSort == 'gender'"
+                   [ngClass]="sortDescending?'bi bi-sort-alpha-down-alt' : 'bi bi-sort-alpha-down'"
+                ></i>
+            </th>
+            <th (click)="sortByPESEL()" scope="col">PESEL
+                <i *ngIf="columnToSort == 'PESEL'"
+                   [ngClass]="sortDescending?'bi bi-sort-numeric-down-alt' : 'bi bi-sort-numeric-down'"
+                ></i>
+            </th>
             <th scope="col">Options</th>
         </tr>
         </thead>
@@ -36,7 +49,7 @@
             <td>{{patient.pesel}}</td>
             <td>
                 <div class="row">
-                    <button (click)="openModal(patient, 'edit')" type="button"  class="btn btn-outline-primary ml-4"
+                    <button (click)="openModal(patient, 'edit')" type="button" class="btn btn-outline-primary ml-4"
                             data-toggle="modal"
                             data-target="#editPatientModal"><i
                             class="bi bi-pencil-square"></i></button>

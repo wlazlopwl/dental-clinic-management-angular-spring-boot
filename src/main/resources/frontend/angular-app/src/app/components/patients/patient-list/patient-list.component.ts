@@ -16,7 +16,9 @@ export class PatientListComponent implements OnInit {
     page = 1;
     count = -1;
     pageSize = 5;
-    pageSizes = [5, 10, 15, 20,25,30];
+    columnToSort = '';
+    sortDescending = false;
+    pageSizes = [5, 10, 15, 20, 25, 30];
 
     constructor(private patientService: PatientService) {
     }
@@ -27,7 +29,7 @@ export class PatientListComponent implements OnInit {
     }
 
     public getPatients() {
-        const params = this.setParams(this.page, this.pageSize);
+        const params = this.setParams(this.page, this.pageSize, this.columnToSort, this.sortDescending);
         this.patientService.getPatients(params).subscribe(
             response => {
                 const {patients, totalItems} = response;
@@ -40,7 +42,7 @@ export class PatientListComponent implements OnInit {
 
     }
 
-    setParams(page: number, pageSize: number): any {
+    setParams(page: number, pageSize: number, columnToSort: string, sortDescending: boolean): any {
         let params: any = {};
         if (page) {
             params[`page`] = page - 1;
@@ -48,6 +50,8 @@ export class PatientListComponent implements OnInit {
         if (pageSize) {
             params[`size`] = pageSize;
         }
+        params[`column`] = columnToSort;
+        params[`descending`] = sortDescending;
 
         return params;
     }
@@ -80,5 +84,24 @@ export class PatientListComponent implements OnInit {
         this.page = event;
         this.getPatients();
 
+    }
+
+    changeGenderSort() {
+        this.columnToSort = 'gender';
+        this.sortDescending = !this.sortDescending;
+        this.getPatients();
+    }
+
+    sortByPESEL() {
+        this.columnToSort = 'PESEL';
+        this.sortDescending = !this.sortDescending;
+        this.getPatients();
+    }
+
+
+    sortByLastName() {
+        this.columnToSort = 'lastName';
+        this.sortDescending = !this.sortDescending;
+        this.getPatients();
     }
 }
