@@ -1,28 +1,32 @@
 package com.pawelwlazlo.dentalclinic.controller;
 
+import com.pawelwlazlo.dentalclinic.dto.PatientDto;
+import com.pawelwlazlo.dentalclinic.dto.PatientPostDto;
+import com.pawelwlazlo.dentalclinic.mappers.PatientMapper;
+import com.pawelwlazlo.dentalclinic.mappers.PatientPostMapper;
 import com.pawelwlazlo.dentalclinic.model.Patient;
 import com.pawelwlazlo.dentalclinic.service.patient.PatientService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/patient")
 public class PatientController {
 
 
     private final PatientService patientService;
+    private final PatientMapper patientMapper;
+    private final PatientPostMapper patientPostMapper;
 
-    @Autowired
-    public PatientController(PatientService patientService) {
-        this.patientService = patientService;
-    }
 
     @GetMapping("/all")
     public ResponseEntity<Map<String, Object>> getAllPatients(
@@ -41,8 +45,14 @@ public class PatientController {
 
 
         List<Patient> patients = patientPage.getContent();
+        List<PatientDto> patientDtos = new ArrayList<>();
+
+        for (Patient patient: patients){
+            patientDtos.add(patientMapper.toDTO(patient));
+        }
+
         Map<String, Object> response = new HashMap<>();
-        response.put("patients", patients);
+        response.put("patients", patientDtos);
         response.put("currentPage", patientPage.getNumber());
         response.put("totalItems", patientPage.getTotalElements());
         response.put("totalPages", patientPage.getTotalPages());
@@ -51,29 +61,29 @@ public class PatientController {
     }
 
     @GetMapping("/find/{id}")
-    public ResponseEntity<Patient> getPatientById(@PathVariable("id") Long id) {
+    public ResponseEntity<PatientDto> getPatientById(@PathVariable("id") Long id) {
         Patient patient = patientService.findPatientById(id);
-        return new ResponseEntity<>(patient, HttpStatus.OK);
+        return new ResponseEntity<>(patientMapper.toDTO(patient), HttpStatus.OK);
     }
 
     @PostMapping("/add")
-    public ResponseEntity<Patient> addPatient(@RequestBody Patient patient) {
+    public ResponseEntity<PatientDto> addPatient(@RequestBody PatientDto patientDto) {
 
-        Patient newPatient = patientService.addPatient(patient);
+         patientService.addPatient(patientMapper.fromDTO(patientDto));
 
-        return new ResponseEntity<>(newPatient, HttpStatus.CREATED);
+        return new ResponseEntity<>(patientDto, HttpStatus.CREATED);
 
     }
 
     @PutMapping(value = "/update")
-    public ResponseEntity<Patient> updatePatient(@RequestBody Patient patient) {
-        Patient updatePatient = patientService.updatePatient(patient);
-        return new ResponseEntity<>(updatePatient, HttpStatus.OK);
+    public ResponseEntity<PatientPostDto> updatePatient(@RequestBody PatientPostDto patientPostDto ) {
+        patientService.updatePatient(patientPostMapper.fromDTO(patientPostDto));
+        return new ResponseEntity<>(patientPostDto, HttpStatus.OK);
 
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Patient> deletePatient(@PathVariable("id") Long id) {
+    public ResponseEntity<PatientDto> deletePatient(@PathVariable("id") Long id) {
         patientService.deletePatient(id);
         return new ResponseEntity<>(HttpStatus.OK);
 

@@ -1,9 +1,10 @@
 package com.pawelwlazlo.dentalclinic.controller;
 
-import com.pawelwlazlo.dentalclinic.model.Room;
+import com.pawelwlazlo.dentalclinic.dto.VisitDto;
+import com.pawelwlazlo.dentalclinic.mappers.VisitMapper;
 import com.pawelwlazlo.dentalclinic.model.Visit;
 import com.pawelwlazlo.dentalclinic.service.VisitService;
-import com.pawelwlazlo.dentalclinic.service.room.RoomService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,19 +13,16 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/visit")
 public class VisitController {
 
 
     private final VisitService visitService;
-
-    @Autowired
-    public VisitController(VisitService visitService) {
-        this.visitService = visitService;
-    }
+    private final VisitMapper visitMapper;
 
     @GetMapping("/all")
-    public ResponseEntity<List<Visit>> getAllVisit(){
+    public ResponseEntity<List<Visit>> getAllVisit() {
         List<Visit> visitList = visitService.findAllVisit();
 
 
@@ -32,9 +30,9 @@ public class VisitController {
     }
 
     @GetMapping("/find/{id}")
-    public ResponseEntity<Visit> getVisitById(@PathVariable("id") Long id) {
+    public ResponseEntity<VisitDto> getVisitById(@PathVariable("id") Long id) {
         Visit visit = visitService.findVisitById(id);
-        return new ResponseEntity<>(visit, HttpStatus.OK);
+        return new ResponseEntity<>(visitMapper.toDTO(visit), HttpStatus.OK);
     }
 
     @PostMapping("/add")

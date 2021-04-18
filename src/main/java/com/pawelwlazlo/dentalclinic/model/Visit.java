@@ -34,7 +34,7 @@ public class Visit implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "patient_id", referencedColumnName = "id")
     private Patient patient;
-    @JsonManagedReference
+//    @JsonManagedReference
     @ManyToOne
     @JoinColumn(name = "room_id", referencedColumnName = "id")
     private Room room;

@@ -3,6 +3,7 @@ import {Injectable} from "@angular/core";
 import {HttpClient} from "@angular/common/http";
 import {Patient} from "./patient";
 import {environment} from "../../../environments/environment";
+import {visit} from "@angular/compiler-cli/src/ngtsc/util/src/visitor";
 
 @Injectable({
   providedIn: 'root'
@@ -21,7 +22,8 @@ export class PatientService {
     return this.http.post<Patient>(`${this.apiServerUrl}/patient/add`, patient);
   }
   public updatePatient(patient : Patient): Observable<Patient> {
-    return this.http.put<Patient>(`${this.apiServerUrl}/patient/update`, patient);
+
+    return this.http.put<Patient>(`${this.apiServerUrl}/patient/update`,patient);
   }
   public deletePatient(patientId: number): Observable<void> {
     return this.http.delete<void>(`${this.apiServerUrl}/patient/delete/${patientId}`);

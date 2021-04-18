@@ -1,6 +1,7 @@
 package com.pawelwlazlo.dentalclinic.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.pawelwlazlo.dentalclinic.types.GenderType;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,7 +19,7 @@ public class Room implements Serializable {
     @Column(nullable = false, updatable = false)
     private Long id;
     private String name;
-    @JsonBackReference
+    @JsonIgnore
     @OneToMany(mappedBy = "room")
     private List<Visit> visits;
 

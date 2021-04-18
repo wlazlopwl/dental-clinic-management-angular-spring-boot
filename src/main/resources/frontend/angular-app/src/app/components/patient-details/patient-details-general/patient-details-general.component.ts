@@ -29,13 +29,16 @@ export class PatientDetailsGeneralComponent implements OnInit {
   }
 
   updatePatient(patient: Patient) {
+
   this.patientService.updatePatient(patient).subscribe(
     (response :Patient) => {
-      console.log(response);
+      console.log(patient);
       window.location.reload();
 
     },
     (error: HttpErrorResponse) => {
+      console.log(patient.visits);
+
       alert(error.message);
     }
   );
