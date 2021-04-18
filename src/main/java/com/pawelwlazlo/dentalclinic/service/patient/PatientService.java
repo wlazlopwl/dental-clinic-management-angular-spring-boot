@@ -53,8 +53,21 @@ public class PatientService {
     }
 
     public Patient updatePatient(Patient patient) {
+        checkIfOthersHaveEmailOrPhone(patient);
         calculatePatientAge(patient);
         return patientRepository.save(patient);
+    }
+
+    private void checkIfOthersHaveEmailOrPhone(Patient patient) {
+        Long id = patient.getId();
+        String email = patient.getEmail();
+        String pesel = patient.getPESEL();
+        if (patientRepository.existsPatientByEmailAndIdIsNot(email,id)) {
+            throw new PatientEmailExistException("Email " + email + " already exist");
+        }
+        else if (patientRepository.existsPatientByPESELAndIdIsNot(pesel,id)) {
+            throw new PatientPESELExistException("Pesel " + pesel + " already exist");
+        }
     }
 
     public void deletePatient(Long id) {
@@ -73,16 +86,16 @@ public class PatientService {
 
     public Page<Patient> getPaginatedPatient(int pageNo, int pageSize) {
         Pageable pageable = PageRequest.of(pageNo, pageSize);
+        ;
         return patientRepository.findAll(pageable);
     }
 
     public Page<Patient> getPaginatedAndSortingPatient(int pageNo, int pageSize, String column, boolean descending) {
         Pageable pageable;
         if (descending) {
-             pageable = PageRequest.of(pageNo, pageSize, Sort.by(column).descending());
-        }
-        else {
-             pageable = PageRequest.of(pageNo, pageSize, Sort.by(column));
+            pageable = PageRequest.of(pageNo, pageSize, Sort.by(column).descending());
+        } else {
+            pageable = PageRequest.of(pageNo, pageSize, Sort.by(column));
 
         }
 

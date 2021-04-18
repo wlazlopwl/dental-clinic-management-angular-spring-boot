@@ -25,7 +25,7 @@ public class VisitDto {
 
     private String updateDate;
 
-    private VisitStatusType visitStatusType;
+    private String visitStatusType;
 
     private String patientId;
 

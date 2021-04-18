@@ -52,7 +52,7 @@ public class VisitController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Visit> deleteVisit(@PathVariable("id") Long id) {
+    public ResponseEntity<VisitDto> deleteVisit(@PathVariable("id") Long id) {
         visitService.deleteVisitById(id);
         return new ResponseEntity<>(HttpStatus.OK);
 
